@@ -11,6 +11,8 @@ import urllib2
 import urllib
 import json
 import os
+import datetime
+
 
 def getData(type):
         index = 1
@@ -78,7 +80,9 @@ def main():
         open_fixed_p1_issue = getFilterIssuesNum(open_data,['priority: 1 (urgent)','flag: fixed'])
         close_fixed_p1_issue = getFilterIssuesNum(close_data,['priority: 1 (urgent)','flag: fixed'])
 
-        payload = "------------------open-----------------" + \
+        payload = "==========================================\n" + \
+                  datetime.datetime.now().strftime('%b-%d-%y %H:%M:%S') + \
+                  "\n------------------open-----------------" + \
                   "\nopen              : " + str(open_issue) + \
                   "\nopen p1           : " + str(open_p1_issue) + \
                   "\nopen fixed        : " + str(open_fixed_issue) + \
@@ -87,7 +91,8 @@ def main():
                   "\nclosed            : " + str(close_issue) + \
                   "\nclosed p1         : " + str(close_p1_issue) + \
                   "\nclosed fixed      : " + str(close_fixed_issue) + \
-                  "\nclosed fixed p1   : " + str(close_fixed_p1_issue)
+                  "\nclosed fixed p1   : " + str(close_fixed_p1_issue) + \
+                  "\n=========================================="
         print payload
 
         reportSlack(payload)
