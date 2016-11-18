@@ -8,7 +8,9 @@
 ####################################
 
 import urllib2
+import urllib
 import json
+import os
 
 def getData(type):
         index = 1
@@ -22,7 +24,7 @@ def getData(type):
                 index = index + 1
                 data = data.append(json.load(urllib2.urlopen(baseurl.format(type,index))))
                 length = len(data)
-        return data    
+        return data
 
 def getPullRequestNum(data):
         index = 0
@@ -33,32 +35,62 @@ def getPullRequestNum(data):
                 except Exception as e:
                         pass
         return index
-                        
+
 def getIssuesNum(data):
         return len(data) - getPullRequestNum(data)
 
 def getFilterIssuesNum(data,labels):
         index = 0
-        data_labels = []
         for item in data:
-                data_labels.append(item['labels'])
-        for data_label in data_labels:
-                print "label:>>>>" + data_label
-                
-        if set(lebels).issubset(set(data['labels'])):
-                index = index + 1
-        
-        
-def main():
-        open_all = getData('open')
-        close_all = getData('closed')
-        
-        open_issue = getIssuesNum(openData)
-        close_issue = getIssuesNum(closedData)
+                try:
+                        label_obj = item['labels']
+                        item_labels = []
+                        for label_item in label_obj:
+                                item_labels.append(label_item['name'])
+                        if set(labels).issubset(set(item_labels)):
+                                index = index + 1
+                        item_labels = []
+                except Exception as e:
+                        pass
+        return index
 
-        open_fixed_issue = get
-        
+def reportSlack(payload):
+        webhook = "https://hooks.slack.com/services/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"
+        content = "{\"text\" :\"" + payload + "\"}"
+        #req = urllib2.Request(webhook, urllib.urlencode(content),headers)
+        #f = urllib2.urlopen(req)
+        #f.read()
+        #f.close()
+        command = "curl -X POST --data-urlencode \'payload="+content+"\' " + webhook
+        os.system(command)
+
+
+def main():
+        open_data = getData('open')
+        close_data = getData('closed')
+
+        open_issue = getIssuesNum(open_data)
+        close_issue = getIssuesNum(close_data)
+        open_p1_issue = getFilterIssuesNum(open_data,['priority: 1 (urgent)'])
+        close_p1_issue = getFilterIssuesNum(close_data,['priority: 1 (urgent)'])
+        open_fixed_issue = getFilterIssuesNum(open_data,['flag: fixed'])
+        close_fixed_issue = getFilterIssuesNum(close_data,['flag: fixed'])
+        open_fixed_p1_issue = getFilterIssuesNum(open_data,['priority: 1 (urgent)','flag: fixed'])
+        close_fixed_p1_issue = getFilterIssuesNum(close_data,['priority: 1 (urgent)','flag: fixed'])
+
+        payload = "------------------open-----------------" + \
+                  "\nopen              : " + str(open_issue) + \
+                  "\nopen p1           : " + str(open_p1_issue) + \
+                  "\nopen fixed        : " + str(open_fixed_issue) + \
+                  "\nopen fixed p1     : " + str(open_fixed_p1_issue) + \
+                  "\n-----------------closed----------------" + \
+                  "\nclosed            : " + str(close_issue) + \
+                  "\nclosed p1         : " + str(close_p1_issue) + \
+                  "\nclosed fixed      : " + str(close_fixed_issue) + \
+                  "\nclosed fixed p1   : " + str(close_fixed_p1_issue)
+        print payload
+
+        reportSlack(payload)
 
 if __name__ == "__main__":
 	main()
-
