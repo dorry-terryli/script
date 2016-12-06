@@ -63,7 +63,7 @@ def reportSlack(payload):
         #f = urllib2.urlopen(req)
         #f.read()
         #f.close()
-        command = "curl -X POST --data-urlencode \'payload="+content+"\' " + webhook
+        command = "curl -X POST -k --data-urlencode \'payload="+content+"\' " + webhook
         os.system(command)
 
 

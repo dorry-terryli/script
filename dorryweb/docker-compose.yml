@@ -1,0 +1,24 @@
+version: '2'
+services:
+  dorry-web:
+	image: TestCloud:5000/dorry-web:0.1.9
+    	restart: always
+    	tty: true
+    	ports:
+		- "4200:4200"
+
+  dorry-api:
+	image: TestCloud:5000/dorry-api:0.1.0
+	restart: always
+	tty: true
+	ports:
+		- "3000:3000"
+
+  dorry-mongo:
+	image: TestCloud:5000/dorry-mongo:0.1.0
+	restart: always
+	tty: true
+	ports
+		- "27117:27017"
+
+		
