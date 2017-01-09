@@ -73,10 +73,19 @@ def main():
 
         open_issue = getIssuesNum(open_data)
         close_issue = getIssuesNum(close_data)
+
+        open_p0_issue = getFilterIssuesNum(open_data,['priority: 0 (critical)'])
+        close_p0_issue = getFilterIssuesNum(close_data,['priority: 0 (critical)'])
+        
         open_p1_issue = getFilterIssuesNum(open_data,['priority: 1 (urgent)'])
         close_p1_issue = getFilterIssuesNum(close_data,['priority: 1 (urgent)'])
+        
         open_fixed_issue = getFilterIssuesNum(open_data,['flag: fixed'])
         close_fixed_issue = getFilterIssuesNum(close_data,['flag: fixed'])
+
+        open_fixed_p0_issue = getFilterIssuesNum(open_data,['priority: 0 (critical)','flag: fixed'])
+        close_fixed_p0_issue = getFilterIssuesNum(close_data,['priority: 0 (critical)','flag: fixed'])
+        
         open_fixed_p1_issue = getFilterIssuesNum(open_data,['priority: 1 (urgent)','flag: fixed'])
         close_fixed_p1_issue = getFilterIssuesNum(close_data,['priority: 1 (urgent)','flag: fixed'])
 
@@ -84,14 +93,14 @@ def main():
                   datetime.datetime.now().strftime('%b-%d-%y %H:%M:%S') + \
                   "\n------------------open-----------------" + \
                   "\nopen              : " + str(open_issue) + \
-                  "\nopen p1           : " + str(open_p1_issue) + \
+                  "\nopen p0           : " + str(open_p0_issue) + \
                   "\nopen fixed        : " + str(open_fixed_issue) + \
-                  "\nopen fixed p1     : " + str(open_fixed_p1_issue) + \
+                  "\nopen fixed p0     : " + str(open_fixed_p0_issue) + \
                   "\n-----------------closed----------------" + \
                   "\nclosed            : " + str(close_issue) + \
-                  "\nclosed p1         : " + str(close_p1_issue) + \
+                  "\nclosed p0         : " + str(close_p0_issue) + \
                   "\nclosed fixed      : " + str(close_fixed_issue) + \
-                  "\nclosed fixed p1   : " + str(close_fixed_p1_issue) + \
+                  "\nclosed fixed p0   : " + str(close_fixed_p0_issue) + \
                   "\n=========================================="
         print payload
 
